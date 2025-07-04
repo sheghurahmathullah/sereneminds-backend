@@ -24,7 +24,7 @@ const app = express();
 // Update your CORS configuration
 app.use(
   cors({
-    origin: "https://sereneminds-frontend.vercel.app/",
+    origin: "https://sereneminds-frontend.vercel.app",
     methods: ["GET", "POST", "PATCH", "DELETE", "PUT"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
