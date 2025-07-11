@@ -15,16 +15,15 @@ module.exports = (sequelize, DataTypes) => {
       },
       code: {
         type: DataTypes.STRING,
-        allowNull: false,
-        unique: true,
+        allowNull: true,
       },
       school: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       schoolCode: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       status: {
         type: DataTypes.BOOLEAN,

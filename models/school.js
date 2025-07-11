@@ -1,10 +1,15 @@
 const { Model } = require("sequelize");
+const State = require("./state");
+const City = require("./city");
+const Branch = require("./branch");
 
 module.exports = (sequelize, DataTypes) => {
   class School extends Model {
     static associate(models) {
       // define association here if needed
       // School could be associated with Institute and Branch in the future
+        School.belongsTo(models.State, { foreignKey: 'stateId', as: 'state' });
+        School.belongsTo(models.City, { foreignKey: 'cityId', as: 'city' });
     }
   }
   School.init(
@@ -18,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         unique: true,
       },
-      institute: {
+      instituteName: {
         type: DataTypes.STRING,
         allowNull: false,
       },
@@ -26,7 +31,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      branch: {
+      branchName: {
         type: DataTypes.STRING,
         allowNull: false,
       },
@@ -41,19 +46,27 @@ module.exports = (sequelize, DataTypes) => {
       address2: {
         type: DataTypes.STRING,
       },
-      city: {
+      stateId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'States', 
+          key: 'id'
+        }
+      },
+      cityId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'Cities', 
+          key: 'id'
+        }
+      },
+      pincode: {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      state: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      pin: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      type: {
+      schoolType: {
         type: DataTypes.STRING,
         allowNull: false,
       },

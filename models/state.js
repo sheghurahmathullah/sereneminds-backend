@@ -1,15 +1,23 @@
 const { Model } = require("sequelize");
+const Institute = require("./institute");
+const City = require("./city");
+const Branch = require("./branch");
+
 
 module.exports = (sequelize, DataTypes) => {
   class State extends Model {
-    static associate(models) {
-      State.belongsTo(models.Country, { foreignKey: "countryId" });
-      State.hasMany(models.City, { foreignKey: "stateId" });
-    }
+     static associate(models) {
+
+    State.hasMany(models.Institute, { foreignKey: "stateId", as: "institutes" });
+    State.hasMany(models.Branch, { foreignKey: "stateId", as: "branches" });
+    State.hasMany(models.School, {foreignKey: "stateId", as: "schools"});
+
+
+     }
   }
   State.init(
     {
-      name: {
+      state: {
         type: DataTypes.STRING,
         allowNull: false,
       },
@@ -17,14 +25,9 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.BOOLEAN,
         defaultValue: true,
       },
-      countryId: {
-        type: DataTypes.INTEGER,
+      country: {
+        type: DataTypes.STRING,
         allowNull: false,
-        references: {
-          model: "Countries",
-          key: "id",
-        },
-        onDelete: "CASCADE",
       },
     },
     {

@@ -1,12 +1,20 @@
 const { Model } = require("sequelize");
+const State = require("./state");
+const City = require("./city");
+const Institute = require("./institute");
 
 module.exports = (sequelize, DataTypes) => {
   class Branch extends Model {
-    static associate(models) {
+      static associate(models) {
+        Branch.belongsTo(models.State, { foreignKey: 'stateId', as: 'state' });
+        Branch.belongsTo(models.City, { foreignKey: 'cityId', as: 'city' });
+        Branch.belongsTo(models.Institute, { foreignKey: 'instituteId', as: 'institute' });
+
+      }
       // define association here if needed
       // Branch could be associated with Institute in the future
-    }
   }
+  
   Branch.init(
     {
       name: {
@@ -16,11 +24,15 @@ module.exports = (sequelize, DataTypes) => {
       code: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true,
+        // unique: true,
       },
-      institute: {
-        type: DataTypes.STRING,
+      instituteId: {
+        type: DataTypes.INTEGER,
         allowNull: false,
+        references: {
+          model: 'Institutes',
+          key: 'id'
+        }
       },
       instituteCode: {
         type: DataTypes.STRING,
@@ -33,13 +45,21 @@ module.exports = (sequelize, DataTypes) => {
       address2: {
         type: DataTypes.STRING,
       },
-      city: {
-        type: DataTypes.STRING,
+       stateId: {
+        type: DataTypes.INTEGER,
         allowNull: false,
+        references: {
+          model: 'States', 
+          key: 'id'
+        }
       },
-      state: {
-        type: DataTypes.STRING,
+      cityId: {
+        type: DataTypes.INTEGER,
         allowNull: false,
+        references: {
+          model: 'Cities', 
+          key: 'id'
+        }
       },
       pincode: {
         type: DataTypes.STRING,

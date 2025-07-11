@@ -1,4 +1,4 @@
-const { School } = require("../models");
+const { School, State, City } = require("../models");
 
 // CREATE
 exports.createSchool = async (req, res) => {
@@ -14,9 +14,13 @@ exports.createSchool = async (req, res) => {
 exports.getSchools = async (req, res) => {
   try {
     const schools = await School.findAll({
-      order: [["createdAt", "DESC"]],
+      include: [
+        {model: State, as :"state"},
+        {model: City, as : "city"},
+      ],
+      order: [["createdAt", "DESC"]]
     });
-    res.json(schools);
+    res.status(200).json(schools);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -25,7 +29,12 @@ exports.getSchools = async (req, res) => {
 // READ ONE
 exports.getSchoolById = async (req, res) => {
   try {
-    const school = await School.findByPk(req.params.id);
+    const school = await School.findByPk(req.params.id, {
+      include: [
+        { model: State, as: "state" },
+        { model: City, as: "city" }
+      ]
+    });
     if (!school) return res.status(404).json({ error: "School not found" });
     res.json(school);
   } catch (err) {
@@ -38,8 +47,17 @@ exports.updateSchool = async (req, res) => {
   try {
     const school = await School.findByPk(req.params.id);
     if (!school) return res.status(404).json({ error: "School not found" });
+
+
     await school.update(req.body);
-    res.json(school);
+    const updateSchool = await School.findByPk(req.params.id, {
+      include: [
+        { model: State, as: "state" },
+        { model: City, as: "city" }
+      ]
+    }) 
+    res.status(200).json(updateSchool);
+    // res.json(updateSchool);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
@@ -51,7 +69,7 @@ exports.deleteSchool = async (req, res) => {
     const school = await School.findByPk(req.params.id);
     if (!school) return res.status(404).json({ error: "School not found" });
     await school.destroy();
-    res.json({ message: "School deleted successfully" });
+    res.status().json({ message: "School deleted successfully" });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

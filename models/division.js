@@ -15,8 +15,8 @@ module.exports = (sequelize, DataTypes) => {
       },
       code: {
         type: DataTypes.STRING,
-        allowNull: false,
-        unique: true,
+        allowNull: true,
+        // unique: true,
       },
       class: {
         type: DataTypes.STRING,
@@ -25,6 +25,14 @@ module.exports = (sequelize, DataTypes) => {
       school: {
         type: DataTypes.STRING,
         allowNull: false,
+      },
+      classCode: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      },
+      schoolCode: {
+      type: DataTypes.STRING,
+      allowNull: true,
       },
       status: {
         type: DataTypes.BOOLEAN,

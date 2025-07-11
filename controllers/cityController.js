@@ -14,7 +14,6 @@ exports.createCity = async (req, res) => {
 exports.getCities = async (req, res) => {
   try {
     const cities = await City.findAll({
-      include: [{ model: State }, { model: Country }],
       order: [["createdAt", "DESC"]],
     });
     res.json(cities);
@@ -26,9 +25,7 @@ exports.getCities = async (req, res) => {
 // READ ONE
 exports.getCityById = async (req, res) => {
   try {
-    const city = await City.findByPk(req.params.id, {
-      include: [{ model: State }, { model: Country }],
-    });
+    const city = await City.findByPk(req.params.id);
     if (!city) return res.status(404).json({ error: "City not found" });
     res.json(city);
   } catch (err) {

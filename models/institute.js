@@ -1,10 +1,24 @@
 const { Model } = require("sequelize");
+const State = require("./state");
+const City = require("./city");
+const Branch = require("./branch");
+
+
+
 
 module.exports = (sequelize, DataTypes) => {
   class Institute extends Model {
-    static associate(models) {
-      // define association here if needed
-    }
+    // ...existing code...
+      static associate(models) {
+        Institute.belongsTo(models.State, { foreignKey: 'stateId', as: 'state' });
+        Institute.belongsTo(models.City, { foreignKey: 'cityId', as: 'city' });
+
+        Institute.hasMany(models.Branch, {
+          foreignKey: 'instituteId',  
+          as: 'branches'
+        });
+
+      }
   }
   Institute.init(
     {
@@ -14,8 +28,8 @@ module.exports = (sequelize, DataTypes) => {
       },
       code: {
         type: DataTypes.STRING,
-        allowNull: false,
-        unique: true,
+        allowNull: true,
+        // unique: true,
       },
       addressLine1: {
         type: DataTypes.STRING,
@@ -24,13 +38,21 @@ module.exports = (sequelize, DataTypes) => {
       addressLine2: {
         type: DataTypes.STRING,
       },
-      city: {
-        type: DataTypes.STRING,
+      stateId: {
+        type: DataTypes.INTEGER,
         allowNull: false,
+        references: {
+          model: 'States', 
+          key: 'id'
+        }
       },
-      state: {
-        type: DataTypes.STRING,
+      cityId: {
+        type: DataTypes.INTEGER,
         allowNull: false,
+        references: {
+          model: 'Cities', 
+          key: 'id'
+        }
       },
       pinCode: {
         type: DataTypes.STRING,

@@ -10,11 +10,12 @@ exports.createState = async (req, res) => {
   }
 };
 
+
+
 // READ ALL
 exports.getStates = async (req, res) => {
   try {
     const states = await State.findAll({
-      include: [{ model: Country }],
       order: [["createdAt", "DESC"]],
     });
     res.json(states);
@@ -26,9 +27,7 @@ exports.getStates = async (req, res) => {
 // READ ONE
 exports.getStateById = async (req, res) => {
   try {
-    const state = await State.findByPk(req.params.id, {
-      include: [{ model: Country }],
-    });
+    const state = await State.findByPk(req.params.id);
     if (!state) return res.status(404).json({ error: "State not found" });
     res.json(state);
   } catch (err) {

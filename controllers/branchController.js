@@ -1,4 +1,5 @@
 const { Branch } = require("../models");
+const { State, City, Institute } = require("../models");
 
 // CREATE
 exports.createBranch = async (req, res) => {
@@ -15,6 +16,12 @@ exports.getBranches = async (req, res) => {
   try {
     const branches = await Branch.findAll({
       order: [["createdAt", "DESC"]],
+      include: [
+        { model: State, as: "state" },
+        { model: City, as: "city" },
+        { model: Institute, as: "institute" }
+      ]
+
     });
     res.json(branches);
   } catch (err) {
@@ -22,10 +29,36 @@ exports.getBranches = async (req, res) => {
   }
 };
 
+
+// Get branches by selected institute, it will return list of branches
+exports.getBranchesByInstitute = async (req, res) => {
+  try { 
+    const branches = await Branch.findAll({
+      where: { instituteId: req.params.instituteId },
+      order: [["createdAt", "DESC"]],
+      include: [
+        { model: State, as: "state" },
+        { model: City, as: "city" },
+        { model: Institute, as: "institute"}
+      ]
+    });
+    res.json(branches);
+  }
+  catch (err) {
+    res.status(500).json({ error: err.message });
+  } 
+};
+
+
 // READ ONE
 exports.getBranchById = async (req, res) => {
   try {
-    const branch = await Branch.findByPk(req.params.id);
+    const branch = await Branch.findByPk(req.params.id, {
+      include: [
+        { model: State, as: "state" },
+        { model: City, as: "city" },
+        { model: Institute, as: "institute" } ]
+    });
     if (!branch) return res.status(404).json({ error: "Branch not found" });
     res.json(branch);
   } catch (err) {
@@ -39,7 +72,15 @@ exports.updateBranch = async (req, res) => {
     const branch = await Branch.findByPk(req.params.id);
     if (!branch) return res.status(404).json({ error: "Branch not found" });
     await branch.update(req.body);
-    res.json(branch);
+     const updatedBranch = await Branch.findByPk(req.params.id, {
+      include: [
+        { model: State, as: "state" },
+        { model: City, as: "city" },
+        { model: Institute, as: "institute" }
+      ]
+    });
+    res.json(updatedBranch);
+
   } catch (err) {
     res.status(400).json({ error: err.message });
   }

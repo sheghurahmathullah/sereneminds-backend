@@ -1,4 +1,5 @@
 const { Institute } = require("../models");
+const { State, City } = require("../models");
 
 // CREATE
 exports.createInstitute = async (req, res) => {
@@ -10,14 +11,21 @@ exports.createInstitute = async (req, res) => {
   }
 };
 
+// / ...existing code...
+
 // READ ALL
 exports.getInstitutes = async (req, res) => {
   try {
     const institutes = await Institute.findAll({
+      include: [
+        { model: State, as: "state" },
+        { model: City, as: "city" }
+      ],
       order: [["createdAt", "DESC"]],
     });
     res.json(institutes);
   } catch (err) {
+    console.error("Error fetching institutes:", err);
     res.status(500).json({ error: err.message });
   }
 };
@@ -25,7 +33,12 @@ exports.getInstitutes = async (req, res) => {
 // READ ONE
 exports.getInstituteById = async (req, res) => {
   try {
-    const institute = await Institute.findByPk(req.params.id);
+    const institute = await Institute.findByPk(req.params.id, {
+      include: [
+        { model: State, as: "state" },
+        { model: City, as: "city" }
+      ]
+    });
     if (!institute)
       return res.status(404).json({ error: "Institute not found" });
     res.json(institute);
@@ -33,6 +46,7 @@ exports.getInstituteById = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
 
 // UPDATE
 exports.updateInstitute = async (req, res) => {
@@ -41,7 +55,16 @@ exports.updateInstitute = async (req, res) => {
     if (!institute)
       return res.status(404).json({ error: "Institute not found" });
     await institute.update(req.body);
-    res.json(institute);
+
+    // Fetch the updated institute with associations
+    const updatedInstitute = await Institute.findByPk(req.params.id, {
+      include: [
+        { model: State, as: "state" },
+        { model: City, as: "city" }
+      ]
+    });
+
+    res.json(updatedInstitute);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
