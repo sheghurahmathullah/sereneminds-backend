@@ -55,6 +55,7 @@
 const app = require('./app');
 const db = require('./models'); // Import from models/index.js
 const PORT = process.env.PORT || 5000;
+require('dotenv').config();
 
 // Test database connection and start server
 db.sequelize.authenticate()

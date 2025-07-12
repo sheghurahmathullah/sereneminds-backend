@@ -1,5 +1,8 @@
+
 const express = require("express");
 const cors = require("cors");
+require('dotenv').config();
+
 const authRoutes = require("./routes/authRoutes");
 const branchRoutes = require("./routes/branchRoutes");
 const schoolRoutes = require("./routes/schoolRoutes");
@@ -24,7 +27,7 @@ const app = express();
 // Update your CORS configuration
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: ["http://localhost:3000", "https://sereneminds-frontend.vercel.app"],
     methods: ["GET", "POST", "PATCH", "DELETE", "PUT"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })

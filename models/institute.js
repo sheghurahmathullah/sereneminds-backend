@@ -13,11 +13,6 @@ module.exports = (sequelize, DataTypes) => {
         Institute.belongsTo(models.State, { foreignKey: 'stateId', as: 'state' });
         Institute.belongsTo(models.City, { foreignKey: 'cityId', as: 'city' });
 
-        Institute.hasMany(models.Branch, {
-          foreignKey: 'instituteId',  
-          as: 'branches'
-        });
-
       }
   }
   Institute.init(

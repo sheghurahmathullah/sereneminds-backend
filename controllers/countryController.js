@@ -61,7 +61,7 @@ exports.toggleStatus = async (req, res) => {
     const country = await Country.findByPk(req.params.id);
     if (!country) return res.status(404).json({ error: "Country not found" });
     country.status = !country.status;
-    await country.save();
+     await country.save();
     res.json(country);
   } catch (err) {
     res.status(500).json({ error: err.message });

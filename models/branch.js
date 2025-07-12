@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
       static associate(models) {
         Branch.belongsTo(models.State, { foreignKey: 'stateId', as: 'state' });
         Branch.belongsTo(models.City, { foreignKey: 'cityId', as: 'city' });
-        Branch.belongsTo(models.Institute, { foreignKey: 'instituteId', as: 'institute' });
+        
 
       }
       // define association here if needed
@@ -26,13 +26,9 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         // unique: true,
       },
-      instituteId: {
-        type: DataTypes.INTEGER,
+      instituteName: {
+        type: DataTypes.STRING,
         allowNull: false,
-        references: {
-          model: 'Institutes',
-          key: 'id'
-        }
       },
       instituteCode: {
         type: DataTypes.STRING,

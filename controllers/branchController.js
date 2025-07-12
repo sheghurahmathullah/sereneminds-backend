@@ -1,5 +1,5 @@
 const { Branch } = require("../models");
-const { State, City, Institute } = require("../models");
+const { State, City } = require("../models");
 
 // CREATE
 exports.createBranch = async (req, res) => {
@@ -19,7 +19,6 @@ exports.getBranches = async (req, res) => {
       include: [
         { model: State, as: "state" },
         { model: City, as: "city" },
-        { model: Institute, as: "institute" }
       ]
 
     });
@@ -39,7 +38,6 @@ exports.getBranchesByInstitute = async (req, res) => {
       include: [
         { model: State, as: "state" },
         { model: City, as: "city" },
-        { model: Institute, as: "institute"}
       ]
     });
     res.json(branches);
@@ -57,7 +55,7 @@ exports.getBranchById = async (req, res) => {
       include: [
         { model: State, as: "state" },
         { model: City, as: "city" },
-        { model: Institute, as: "institute" } ]
+      ]
     });
     if (!branch) return res.status(404).json({ error: "Branch not found" });
     res.json(branch);
@@ -76,7 +74,6 @@ exports.updateBranch = async (req, res) => {
       include: [
         { model: State, as: "state" },
         { model: City, as: "city" },
-        { model: Institute, as: "institute" }
       ]
     });
     res.json(updatedBranch);
